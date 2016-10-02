@@ -5,9 +5,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -148,14 +150,27 @@ public class RegisterActivity extends ActionBarActivity {
                     if (chbox_inCompany.isChecked()){
                         isLocationSet = getTheCurrentLocation ();
                     }
-                    else isLocationSet = true;
+                    else {
+                        lat = etxt_lat.getText().toString();
+                        lng = etxt_long.getText().toString();
+                        isLocationSet = true;
+                    }
 
                     if (isLocationSet){
+                        //insert UserInfo into DataBase
+                        addUserInfoToDB();
 
-                    //insert UserInfo into DataBase
-                    addUserInfoToDB();
-                    //to set the first time the application run with false
-                    MyPreferences.editFirst();
+                        //to set the first time the application run with false
+                        MyPreferences.editFirst();
+
+                        //to save company location in shared preference:
+                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString("GEOFENCE_LOCATION_LAT", lat);
+                        editor.putString("GEOFENCE_LOCATION_LNG", lng);
+                        editor.apply();
+
+                        //start mainactivity
                         Intent mainActivityIntent = new Intent(RegisterActivity.this,MainActivity.class);
                         startActivity(mainActivityIntent);
 

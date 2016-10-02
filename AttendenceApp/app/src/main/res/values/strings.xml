@@ -18,4 +18,5 @@
     <string name="btn_register_holiday">Specify your days off</string>
     <string name="btn_main_startservice">Start Service</string>
     <string name="btn_main_stopservice">Stop Service</string>
+    <string name="btn_main_startgeofence">Start Geofence</string>
 </resources>
