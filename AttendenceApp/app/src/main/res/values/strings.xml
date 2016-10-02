@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">AttendenceApp</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_register">RegisterActivity</string>
+    <string name="etxt_register_name">Name</string>
+    <string name="etxt_register_companyname">Company Name</string>
+    <string name="etxt_register_latitude">Lat</string>
+    <string name="etxt_register_longitude">Long</string>
+    <string name="etxt_register_timefrom">From</string>
+    <string name="txt_register_worktime">Work Time:</string>
+    <string name="etxt_register_timeto">To</string>
+    <string name="btn_register_save">Save > </string>
+    <string name="txt_register_CompanyLocation">Company Loc</string>
+    <string name="chbox_register_incompany">  I \'m in Company right now</string>
+    <string name="btn_register_holiday">Specify your days off</string>
+    <string name="btn_main_startservice">Start Service</string>
+    <string name="btn_main_stopservice">Stop Service</string>
+</resources>
