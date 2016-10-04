@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
     //for creation of GeoFence
     private static final long GEO_DURATION = 60 * 60 * 1000; //geofence will be removed automatically after one hour.
     private static final String GEOFENCE_REQ_ID = "My Geofence";
-    private static final float GEOFENCE_RADIUS = 500.0f; // in meters
+    private static final float GEOFENCE_RADIUS = 1.0f; // in meters
 
     //Geofence request
     private PendingIntent geoFencePendingIntent;
@@ -88,6 +88,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         btn_startGeofence.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 startGeofence();
             }
         });
@@ -289,7 +290,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         //A flag indicating that geofencing service should trigger GEOFENCE_TRANSITION_ENTER notification
         // at the moment when the geofence is added and if the device is already inside that geofence.
         return  new GeofencingRequest.Builder()
-                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER) //Sets the geofence notification behavior at the moment when the geofences are added.
+                .setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_EXIT) //Sets the geofence notification behavior at the moment when the geofences are added.
                 .addGeofence(geofence)
                 .build();
     }
@@ -315,10 +316,12 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
         //FLAG_UPDATE_CURRENT
         //Flag indicating that if the described PendingIntent already exists,
         // then keep it but replace its extra data with what is in this new Intent.
-        return PendingIntent.getService(this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getService(this, GEOFENCE_REQ_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        return pendingIntent;
+
     }
 
-    public void addGeofence(GeofencingRequest request){
+    public void addGeofenceMethod(GeofencingRequest request){
         Log.d(TAG, "addGeofence");
         if (checkPermission())
             LocationServices.GeofencingApi.addGeofences(
@@ -345,6 +348,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         return new LatLng(lat,lng);  //company Geofence Location
 
+
     }
 
     public void startGeofence(){
@@ -352,7 +356,7 @@ public class MainActivity extends ActionBarActivity implements GoogleApiClient.C
 
         Geofence geofence = createGeofence(getCompanyGeofenceLocation(), GEOFENCE_RADIUS);
         GeofencingRequest geofenceRequest  = createGeofenceRequest(geofence);
-        addGeofence(geofenceRequest);
+        addGeofenceMethod(geofenceRequest);
     }
 
     private static final int PRIORITY_HIGH = 5;

@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
@@ -50,6 +51,7 @@ public class GeofenceTransitionService extends IntentService {
 
         //returns the GEOFENCE_TRANSITION_ flags value defined in Geofence
         int geoFenceTransition = geofencingEvent.getGeofenceTransition();
+        Toast.makeText(getApplicationContext(),"Intent test "+ geoFenceTransition , Toast.LENGTH_SHORT).show();
 
         if (geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER){
             //we retrieve a list of the triggered geofences and create a notification with the appropriate actions.
@@ -62,6 +64,8 @@ public class GeofenceTransitionService extends IntentService {
 
             //send notification detail with string
             sendNotification(geofenceTransitionDetail);
+
+            Toast.makeText(getApplicationContext(),"GeofenceEntering",Toast.LENGTH_LONG).show();
 
         }
     }
@@ -90,10 +94,15 @@ public class GeofenceTransitionService extends IntentService {
                 getApplicationContext(), msg
         );
 
-        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-        stackBuilder.addParentStack(MainActivity.class);
-        stackBuilder.addNextIntent(notificationIntent);
-        PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+//        TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
+//        stackBuilder.addParentStack(MainActivity.class);
+//        stackBuilder.addNextIntent(notificationIntent);
+//        PendingIntent notificationPendingIntent = stackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        // 2. Create a PendingIntent
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent notificationPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Creating and sending Notification
         NotificationManager notificatioMng =
@@ -113,6 +122,7 @@ public class GeofenceTransitionService extends IntentService {
                 .setContentText("Geofence Notification!")
                 .setContentIntent(notificationPendingIntent)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_VIBRATE | Notification.DEFAULT_SOUND)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
         return notificationBuilder.build();
     }
